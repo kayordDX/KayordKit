@@ -1,0 +1,27 @@
+version: "3"
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: kayord
+      POSTGRES_USER: kayord
+      POSTGRES_PASSWORD: bbHRro5Ju2L9cw
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "zgLwaGDj2m6U5A"
+      MSSQL_PID: "Express"
+    ports:
+      - 1433:1433
+    volumes:
+      - mssqldata:/var/opt/mssql
+
+volumes:
+  pgdata:
+  mssqldata:
