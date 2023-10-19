@@ -1,0 +1,8 @@
+﻿namespace KayordKit.Builder.Providers.Oracle;
+internal class OracleColumn
+{
+    public string ColumnName { get; set; } = string.Empty;
+    public string DataType { get; set; } = string.Empty;
+    public string DataLength { get; set; } = string.Empty;
+    public string Nullable { get; set; } = string.Empty;
+}

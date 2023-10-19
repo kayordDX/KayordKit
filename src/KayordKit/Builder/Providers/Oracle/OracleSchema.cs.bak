@@ -1,0 +1,5 @@
+﻿namespace KayordKit.Builder.Providers.Oracle;
+internal class OracleSchema
+{
+    public string SchemaName { get; set; } = string.Empty;
+}

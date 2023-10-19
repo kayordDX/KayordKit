@@ -1,0 +1,7 @@
+﻿namespace KayordKit.Builder.Providers.Oracle;
+internal class OracleConstraint
+{
+    public string ColumnName { get; set; } = string.Empty;
+    public string ConstraintName { get; set; } = string.Empty;
+    public string ConstraintType { get; set; } = string.Empty;
+}
