@@ -1,16 +1,20 @@
 global using FastEndpoints;
-using KayordKit;
-using FastEndpoints.Swagger;
-using System.Reflection;
+using KayordKit.Extensions.Host;
+using KayordKit.Extensions.Api;
+using KayordKit.Extensions.Health;
+
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddFastEndpoints(o =>
-{
-    o.Assemblies = new[] { KayordKit.Util.GetAssembly() };
-})
+builder.Host.AddLoggingConfiguration(builder.Configuration);
 
-.SwaggerDocument();
+builder.Services.ConfigureApi();
+
+builder.Services.AddHealthChecks()
+            .AddProcessAllocatedMemoryHealthCheck(150);
+
 var app = builder.Build();
 
-app.UseFastEndpoints().UseSwaggerGen();
+app.UseApi();
+app.UseHealth();
+
 app.Run();

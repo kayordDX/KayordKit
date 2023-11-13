@@ -1,3 +1,6 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,5 +13,15 @@ public static class HealthExtensions
         services.AddHealthChecks()
             .AddProcessAllocatedMemoryHealthCheck(150)
             .AddNpgSql(connectionString: configuration.GetConnectionString("DefaultConnection")!);
+    }
+
+
+    public static IApplicationBuilder UseHealth(this IApplicationBuilder app)
+    {
+        app.UseHealthChecks("/health", new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+        return app;
     }
 }

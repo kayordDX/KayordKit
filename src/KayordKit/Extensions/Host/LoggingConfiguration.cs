@@ -1,6 +1,7 @@
 namespace KayordKit.Extensions.Host;
 
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Core;
@@ -9,7 +10,7 @@ using Serilog.Exceptions;
 
 public static class LoggingConfiguration
 {
-    public static void AddLoggingConfiguration(this IHostBuilder host, IWebHostEnvironment env)
+    public static void AddLoggingConfigurationOld(this IHostBuilder host, IWebHostEnvironment env)
     {
         var loggingLevelSwitch = new LoggingLevelSwitch();
         if (env.IsDevelopment())
@@ -29,6 +30,14 @@ public static class LoggingConfiguration
 
         Log.Logger = logger.CreateLogger();
 
+        host.UseSerilog();
+    }
+
+    public static void AddLoggingConfiguration(this IHostBuilder host, IConfiguration configuration)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
         host.UseSerilog();
     }
 }
