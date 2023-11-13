@@ -22,4 +22,4 @@ jobs:
       - name: Pack
         run: dotnet pack --no-restore -c Release
       - name: Publish
-        run: dotnet nuget push ./bin/Release/KayordKit.*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./src/KayordKit/bin/Release/KayordKit.*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
