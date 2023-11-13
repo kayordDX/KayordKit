@@ -8,7 +8,13 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageId>KayordKit</PackageId>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
+    <Description>KayordKit to guide the way</Description> 
+    <PackageReadmeFile>../../README.md</PackageReadmeFile>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>../../icon.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
