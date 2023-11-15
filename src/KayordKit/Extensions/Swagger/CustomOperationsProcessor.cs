@@ -8,10 +8,12 @@ public class CustomOperationsProcessor : IOperationProcessor
     public bool Process(OperationProcessorContext context)
     {
         string result = context.OperationDescription.Operation.OperationId;
-        string name = Util.GetAssembly().FullName ?? "";
+        string name = AppDomain.CurrentDomain.FriendlyName.Replace(".", "");
         string featureName = name + "Features";
         result = result.Replace(featureName, "");
+        result = result.Replace("KayordKitFeatures", "");
         result = result.Replace(name, "");
+        result = result.Replace("KayordKit", "");
         result = result.Replace("Endpoint", "");
         context.OperationDescription.Operation.OperationId = result;
         return true;
