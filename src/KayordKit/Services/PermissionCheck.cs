@@ -1,5 +1,3 @@
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace KayordKit.Services;
@@ -25,15 +23,17 @@ Example:
 
 public class PermissionCheck : IGlobalPreProcessor
 {
-    public async Task PreProcessAsync(object req, HttpContext ctx, List<ValidationFailure> failures, CancellationToken ct)
+    public async Task PreProcessAsync(IPreProcessorContext context, CancellationToken ct)
     {
-        var currentUser = ctx.Resolve<ICurrentUserService>();
-        var logger = ctx.Resolve<ILogger<PermissionCheck>>();
+        var currentUser = context.HttpContext.Resolve<ICurrentUserService>();
+        var logger = context.HttpContext.Resolve<ILogger<PermissionCheck>>();
 
         // TODO: Check permissions for current call
-        logger.LogError($"request:{req?.GetType().FullName} path: {ctx.Request.Path}");
+        logger.LogError($"request:{context.Request?.GetType().FullName} path: {context.HttpContext.Request.Path}");
         logger.LogError($"user:{currentUser.Sub}");
 
+        // TODO: remove this
+        await Task.Delay(0);
         // return Task.CompletedTask;
     }
 }
