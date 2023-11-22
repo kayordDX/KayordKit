@@ -12,11 +12,11 @@ public static class DependencyInjection
         // services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         // services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
-        services.AddDbContext<AppDbContext>(options =>
+        services.AddDbContext<KayordKitDbContext>(options =>
         {
             options.UseNpgsql(
                 connectionString,
-                b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
+                b => b.MigrationsAssembly(typeof(KayordKitDbContext).Assembly.FullName));
             // options.EnableSensitiveDataLogging();
         });
 

@@ -70,7 +70,7 @@ public class DbConnectionContext
     {
         using (var scope = _scopeFactory.CreateScope())
         {
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var db = scope.ServiceProvider.GetRequiredService<KayordKitDbContext>();
 
             _providerList = db.DataProvider.ToDictionary(x => x.Name, x =>
                 new ProviderDTO

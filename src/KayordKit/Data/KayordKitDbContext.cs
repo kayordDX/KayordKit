@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KayordKit.Data;
 
-public class AppDbContext : DbContext
+public class KayordKitDbContext : DbContext
 {
     private readonly ICurrentUserService _currentUserService;
 
-    public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUserService) : base(options)
+    public KayordKitDbContext(DbContextOptions<KayordKitDbContext> options, ICurrentUserService currentUserService) : base(options)
     {
         _currentUserService = currentUserService;
     }

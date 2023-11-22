@@ -11,10 +11,7 @@ public static class ApiExtensions
     public static void ConfigureApi(this IServiceCollection services)
     {
         services.AddFastEndpoints();
-        services.AddFastEndpoints(o =>
-        {
-            o.Assemblies = new[] { Util.GetAssembly() };
-        })
+        services.AddFastEndpoints()
         .SwaggerDocument(o =>
         {
             o.DocumentSettings = s =>

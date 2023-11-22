@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -34,7 +33,7 @@ public static class Util
         byte[] encryptionKeyArray = md5Provider.ComputeHash(Encoding.UTF8.GetBytes(_key));
         md5Provider.Clear();
 
-        byte[] stringToEncryptArray = UTF8Encoding.UTF8.GetBytes(stringToEncrypt);
+        byte[] stringToEncryptArray = Encoding.UTF8.GetBytes(stringToEncrypt);
 
         var desProvider = TripleDES.Create();
         desProvider.Key = encryptionKeyArray;
@@ -48,10 +47,5 @@ public static class Util
 
         string encryptedString = Convert.ToBase64String(resultArray, 0, resultArray.Length);
         return encryptedString;
-    }
-
-    public static Assembly GetAssembly()
-    {
-        return Assembly.GetExecutingAssembly();
     }
 }
