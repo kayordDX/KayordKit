@@ -20,7 +20,7 @@ public static class CorsExtensions
         });
     }
 
-    public static IApplicationBuilder UseCors(this IApplicationBuilder app)
+    public static IApplicationBuilder UseCorsKayord(this IApplicationBuilder app)
     {
         app.UseCors(_allowedOrigins);
         return app;
