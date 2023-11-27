@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FastEndpoints" Version="5.20.0-rc1" />
-    <PackageReference Include="FastEndpoints.Swagger" Version="5.20.0-rc1" />
+    <PackageReference Include="FastEndpoints" Version="5.20.0-rc2" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="5.20.0-rc2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
   </ItemGroup>

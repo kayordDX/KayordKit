@@ -20,7 +20,7 @@ public static class ApiExtensions
                 s.Version = "v1";
                 s.MarkNonNullablePropsAsRequired();
                 s.OperationProcessors.Add(new CustomOperationsProcessor());
-                s.SchemaNameGenerator = new CustomSchemaNameGenerator();
+                s.SchemaSettings.SchemaNameGenerator = new CustomSchemaNameGenerator();
             };
         });
     }

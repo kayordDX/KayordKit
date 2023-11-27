@@ -9,7 +9,8 @@ internal class CustomSchemaNameGenerator : DefaultSchemaNameGenerator, ISchemaNa
     public override string Generate(Type type)
     {
         CachedType cachedType = type.ToCachedType();
-        JsonSchemaAttribute? inheritedAttribute = cachedType.GetInheritedAttribute<JsonSchemaAttribute>();
+        JsonSchemaAttribute? inheritedAttribute = cachedType.GetAttribute<JsonSchemaAttribute>(true);
+        // JsonSchemaAttribute? inheritedAttribute = cachedType.GetInheritedAttribute<JsonSchemaAttribute>();
         if (!string.IsNullOrEmpty(inheritedAttribute?.Name))
         {
             return inheritedAttribute.Name;
@@ -26,19 +27,19 @@ internal class CustomSchemaNameGenerator : DefaultSchemaNameGenerator, ISchemaNa
 
     private static string GetName(CachedType cType)
     {
-        if (cType.TypeName == "Int16")
+        if (cType.Name == "Int16")
         {
             return GetNullableDisplayName(cType, "Short");
         }
-        else if (cType.TypeName == "Int32")
+        else if (cType.Name == "Int32")
         {
             return GetNullableDisplayName(cType, "Integer");
         }
-        else if (cType.TypeName == "Int64")
+        else if (cType.Name == "Int64")
         {
             return GetNullableDisplayName(cType, "Long");
         }
-        string name = cType.Type?.FullName ?? cType.TypeName ?? string.Empty;
+        string name = cType.Type?.FullName ?? cType.Name ?? string.Empty;
         return GetNullableDisplayName(cType, ReplaceName(name));
     }
 

@@ -6,7 +6,7 @@ namespace KayordKit.Extensions.Swagger;
 
 public class CustomTypeNameGenerator : DefaultTypeNameGenerator
 {
-    public override string Generate(JsonSchema schema, string typeNameHint, IEnumerable<string> reservedTypeNames)
+    public override string Generate(JsonSchema schema, string? typeNameHint, IEnumerable<string> reservedTypeNames)
     {
         if (string.IsNullOrEmpty(typeNameHint) && !string.IsNullOrEmpty(schema.DocumentPath))
         {
@@ -32,7 +32,7 @@ public class CustomTypeNameGenerator : DefaultTypeNameGenerator
     {
         if (string.IsNullOrEmpty(typeNameHint) && schema.HasTypeNameTitle)
         {
-            typeNameHint = schema.Title;
+            typeNameHint = schema.Title ?? string.Empty;
         }
 
         string text = typeNameHint;
