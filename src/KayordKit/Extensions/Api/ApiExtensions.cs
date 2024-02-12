@@ -8,20 +8,28 @@ namespace KayordKit.Extensions.Api;
 
 public static class ApiExtensions
 {
-    public static void ConfigureApi(this IServiceCollection services)
+    public static void ConfigureApi(this IServiceCollection services, Action<DocumentOptions>? options = null)
     {
         services.AddFastEndpoints();
         services.AddFastEndpoints()
         .SwaggerDocument(o =>
         {
-            o.DocumentSettings = s =>
+            if (options != null)
             {
-                s.Title = AppDomain.CurrentDomain.FriendlyName;
-                s.Version = "v1";
-                s.MarkNonNullablePropsAsRequired();
-                s.OperationProcessors.Add(new CustomOperationsProcessor());
-                s.SchemaSettings.SchemaNameGenerator = new CustomSchemaNameGenerator();
-            };
+                var doc = new DocumentOptions();
+                options?.Invoke(doc);
+                o = doc;
+            }
+            else
+            {
+                o.DocumentSettings = s =>
+                {
+                    s.Title = AppDomain.CurrentDomain.FriendlyName;
+                    s.Version = "v1";
+                    s.MarkNonNullablePropsAsRequired();
+                    s.SchemaSettings.SchemaNameGenerator = new CustomSchemaNameGenerator(false);
+                };
+            }
         });
     }
 

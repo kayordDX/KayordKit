@@ -1,63 +1,77 @@
-using Namotion.Reflection;
-using NJsonSchema.Annotations;
+using System.Text;
 using NJsonSchema.Generation;
 
 namespace KayordKit.Extensions.Swagger;
 
 internal class CustomSchemaNameGenerator : DefaultSchemaNameGenerator, ISchemaNameGenerator
 {
+    readonly bool _shortSchemaNames = false;
+
+    public CustomSchemaNameGenerator(bool shortSchemaNames)
+    {
+        _shortSchemaNames = shortSchemaNames;
+    }
+
     public override string Generate(Type type)
     {
-        CachedType cachedType = type.ToCachedType();
-        JsonSchemaAttribute? inheritedAttribute = cachedType.GetAttribute<JsonSchemaAttribute>(true);
-        // JsonSchemaAttribute? inheritedAttribute = cachedType.GetInheritedAttribute<JsonSchemaAttribute>();
-        if (!string.IsNullOrEmpty(inheritedAttribute?.Name))
-        {
-            return inheritedAttribute.Name;
-        }
+        var isGeneric = type.IsGenericType;
+        var fullNameWithoutGenericArgs =
+            isGeneric
+                ? type.FullName![..type.FullName!.IndexOf('`')]
+                : type.FullName;
 
-        CachedType cachedType2 = type.ToCachedType();
-        if (cachedType2.Type.IsConstructedGenericType)
+        if (_shortSchemaNames)
         {
-            return GetName(cachedType2).Split(new char[1] { '`' }).First() + "Of" + string.Join("And", cachedType2.GenericArguments.Select((CachedType a) => Generate(a.OriginalType)));
+            var index = fullNameWithoutGenericArgs!.LastIndexOf('.');
+            index = index == -1 ? 0 : index + 1;
+            var shortName = fullNameWithoutGenericArgs[index..];
+
+            return isGeneric
+                       ? shortName + GenericArgString(type)
+                       : shortName;
         }
+        var sanitizedFullName = fullNameWithoutGenericArgs!.Replace(".", string.Empty);
+        string name = AppDomain.CurrentDomain.FriendlyName.Replace(".", string.Empty);
+        string featureName = name + "Features";
+        sanitizedFullName = sanitizedFullName.Replace(featureName, string.Empty);
+        sanitizedFullName = sanitizedFullName.Replace(name, string.Empty);
+        sanitizedFullName = sanitizedFullName.Replace("FastEndpoints", string.Empty);
+        sanitizedFullName = sanitizedFullName.Replace("Endpoint", string.Empty);
 
-        return GetName(cachedType2);
-    }
+        return isGeneric
+                   ? sanitizedFullName + GenericArgString(type)
+                   : sanitizedFullName;
 
-    private static string GetName(CachedType cType)
-    {
-        if (cType.Name == "Int16")
+        static string? GenericArgString(Type type)
         {
-            return GetNullableDisplayName(cType, "Short");
-        }
-        else if (cType.Name == "Int32")
-        {
-            return GetNullableDisplayName(cType, "Integer");
-        }
-        else if (cType.Name == "Int64")
-        {
-            return GetNullableDisplayName(cType, "Long");
-        }
-        string name = cType.Type?.FullName ?? cType.Name ?? string.Empty;
-        return GetNullableDisplayName(cType, ReplaceName(name));
-    }
+            if (type.IsGenericType)
+            {
+                var sb = new StringBuilder();
+                var args = type.GetGenericArguments();
 
-    private static string ReplaceName(string name)
-    {
-        name = name.Replace("FastEndpoints.", "");
-        // result = result.Replace("Kayord.Api.Features", "");
-        // result = result.Replace(".", "");
-        // result = result.Replace("FastEndpoints", "");
-        // // result = result.Replace("Kayord", "");
-        // // result = result.Replace("SieveModels", "");
-        // // result = result.Replace("CommonEnums", "");
-        // // result = result.Replace("CommonModels", "");
-        return name;
-    }
+                for (var i = 0; i < args.Length; i++)
+                {
+                    var arg = args[i];
+                    if (i == 0)
+                        sb.Append("Of");
+                    sb.Append(TypeNameWithoutGenericArgs(arg));
+                    sb.Append(GenericArgString(arg));
+                    if (i < args.Length - 1)
+                        sb.Append("And");
+                }
 
-    private static string GetNullableDisplayName(CachedType type, string actual)
-    {
-        return (type.IsNullableType ? "Nullable" : "") + actual;
+                return sb.ToString();
+            }
+
+            return type.Name;
+
+            static string TypeNameWithoutGenericArgs(Type type)
+            {
+                var index = type.Name.IndexOf('`');
+                index = index == -1 ? 0 : index;
+
+                return type.Name[..index];
+            }
+        }
     }
 }
